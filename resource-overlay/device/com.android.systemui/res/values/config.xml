@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Quick Settings Tiles -->
+    <string name="quick_settings_tiles_default">internet,bt,dnd,rotation,flashlight,airplane,hotspot,alarm,saver,night,cast,screenrecord,mictoggle,cameratoggle,qr_code_scanner,controls,wallet,location</string>
+    <string name="quick_settings_tiles_stock">internet,bt,dnd,rotation,flashlight,airplane,hotspot,alarm,saver,night,cast,screenrecord,mictoggle,cameratoggle,qr_code_scanner,controls,wallet,location</string>
+</resources>

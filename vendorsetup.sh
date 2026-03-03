@@ -1,0 +1,1 @@
+# Lunch choices are registered via COMMON_LUNCH_CHOICES in AndroidProducts.mk

@@ -1,0 +1,5 @@
+# DPM
+persist.vendor.dpm.feature=11
+
+# Media
+media.stagefright.thumbnail.prefer_hw_codecs=true

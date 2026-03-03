@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="wifi_tether_configure_ssid_default">moto g57</string>
+    <string name="config_wifiSoftap5gChannelList">36-161</string>
+</resources>

@@ -1,0 +1,26 @@
+# Audio
+ro.audio.monitorRotation=true
+ro.audio.monitorWindowRotation=true
+
+# Camera
+persist.vendor.camera.physical.num=3
+
+# Dalvik
+dalvik.vm.heapstartsize=8m
+dalvik.vm.heapgrowthlimit=128m
+dalvik.vm.heapsize=256m
+dalvik.vm.heaptargetutilization=0.75
+dalvik.vm.heapminfree=512k
+dalvik.vm.heapmaxfree=8m
+
+# Display
+ro.sf.lcd_density=390
+
+# RIL
+rild.libpath=/vendor/lib64/libril-qc-hal-qmi.so
+
+# Sensors
+ro.vendor.sensors.mot_ltv=true
+
+# Zygote
+ro.zygote=zygote64
