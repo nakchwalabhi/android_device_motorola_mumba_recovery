@@ -26,6 +26,13 @@
 #
 
 on early-init
+    # Disable Qualcomm Trusted Touch (QTS) BEFORE loading touch drivers.
+    # The QTS subsystem node is created by the kernel itself and is available
+    # from early-init. Writing 0 here tells the kernel not to set up a
+    # TrustZone-protected touch session, allowing the drivers below to probe
+    # the touch IC directly.
+    write /sys/kernel/qts/primary/trusted_touch_enable 0
+
     # Load touch drivers and dependencies natively baked into recovery.img
     insmod /lib/modules/sensors_class.ko
     insmod /lib/modules/chipone_tddi_v3_mmi.ko
@@ -54,6 +61,13 @@ on init
     mkdir /config/usb_gadget/g1/configs/b.1 0777 shell shell
     symlink /config/usb_gadget/g1/configs/b.1 /config/usb_gadget/g1/os_desc/b.1
     mkdir /config/usb_gadget/g1/configs/b.1/strings/0x409 0770 shell shell
+    # Create the FFS mount points so adbd can open its endpoint files and
+    # signal sys.usb.ffs.ready=1. The vendor's init.mmi.usb.rc does the same
+    # but is only loaded by Lineage Recovery (not TWRP); adding it here
+    # ensures both recovery flavours work.
+    mkdir /dev/usb-ffs 0775 shell system
+    mkdir /dev/usb-ffs/adb 0770 shell shell
+    mount functionfs adb /dev/usb-ffs/adb uid=2000,gid=2000,rmode=0770,fmode=0660
     setprop sys.usb.configfs 1
 
 on property:ro.boot.usbcontroller=*
@@ -90,12 +104,9 @@ on fs
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
 
-# TWRP sets twrp.modules.loaded=true after TW_LOAD_VENDOR_MODULES completes.
-# At that point the ChipOne TDDI / ILITEK touch drivers are in the kernel and
-# their trusted_touch_enable sysfs nodes are live. Disable QTS (Qualcomm
-# Trusted Touch Session) so the kernel drivers can access the touch IC
-# directly without TrustZone arbitration.
+# After the touch drivers have probed successfully the driver itself
+# creates per-device trusted_touch_enable sysfs nodes. Write 0 to
+# those as well to release any TZ resources the driver may have claimed.
 on property:twrp.modules.loaded=true
-    write /sys/kernel/qts/primary/trusted_touch_enable 0
     write /sys/devices/platform/soc/990000.i2c/i2c-0/0-0038/trusted_touch_enable 0
     write /sys/devices/platform/soc/990000.spi/spi_master/spi0/spi0.0/trusted_touch_enable 0
